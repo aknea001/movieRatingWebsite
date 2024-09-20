@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 from dotenv import load_dotenv
 import mysql.connector
 import os
@@ -18,6 +18,10 @@ sqlConfig = {
 def index():
     return render_template("index.html")
 
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
 @app.route("/submit", methods=["POST"])
 def submitForm():
     email = request.form["email"]
@@ -33,7 +37,8 @@ def submitForm():
         cursor.execute(query, (email, passwd, country))
         connection.commit()
 
-        return "Successfully sent data.."
+        print("Successfully sent data..")
+        return redirect("/", code=302)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

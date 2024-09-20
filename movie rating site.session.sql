@@ -33,7 +33,7 @@ VALUES
     ("Shrek", "Family comedy");
 
 -- @block
-SELECT * FROM ratings;
+SELECT id, email, country FROM users;
 
 -- @block
 INSERT INTO users (email, country)

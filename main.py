@@ -24,8 +24,9 @@ def submitForm():
     passwd = request.form["passwd"]
     country = request.form["country"]
 
+    connection = mysql.connector.connect(**sqlConfig)
+
     try:
-        connection = mysql.connector.connect(sqlConfig)
         cursor = connection.cursor()
 
         query = "INSERT INTO users (email, passwd, country) VALUES (%s, %s, %s)"
@@ -33,10 +34,8 @@ def submitForm():
         connection.commit()
 
         return "Successfully sent data.."
-
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
-    
     finally:
         if connection.is_connected():
             cursor.close()

@@ -34,3 +34,24 @@ VALUES
 SELECT * FROM ratings;
 
 -- @block
+INSERT INTO users (email, country)
+VALUES (
+    "henry.dang@gmail.com",
+    "NO"
+);
+
+-- @block
+INSERT INTO ratings (rating, movieID, userID)
+VALUES
+    (1, 1, 2),
+    (1, 2, 2),
+    (5, 3, 2);
+
+-- @block
+SELECT
+    movies.title,
+    ratings.rating,
+    users.email
+FROM ratings
+INNER JOIN movies on ratings.movieID = movies.id
+INNER JOIN users on ratings.userID = users.id;

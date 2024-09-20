@@ -8,10 +8,19 @@
 </head>
 <body>
     <h1>Register</h1>
-    <form action="/submit" method="post">
+    <form action="/submit" method="post" id="registerForm">
         <input placeholder="E-mail" type="text" name="email" id="email" required><br>
         <input placeholder="Password" type="password" name="password" id="password" required><br>
-        <input type="submit" value="submit">
+        
+        <select name="country" id="country">
+            <option selected hidden disabled>--Country--</option>
+            <option value="NO">Norway</option>
+            <option value="US">USA</option>
+            <option value="UK">United Kingdom</option>
+            <option value="NA">Anything else</option>
+        </select><br>
+
+        <input id="confirmBtn" type="submit" value="submit">
     </form>
 </body>
 </html>

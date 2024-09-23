@@ -20,7 +20,7 @@
                 "enableSsl": "Disabled"
             },
             "previewLimit": 50,
-            "server": "192.168.1.63",
+            "server": "100.94.183.127",
             "port": 3306,
             "driver": "MySQL",
             "name": "remote movieRating",

@@ -13,6 +13,20 @@
             "database": "movieRating",
             "username": "root",
             "askForPassword": true
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "192.168.1.63",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "remote movieRating",
+            "database": "movieRating",
+            "username": "keali",
+            "askForPassword": true
         }
     ]
 }

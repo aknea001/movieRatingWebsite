@@ -8,8 +8,8 @@ load_dotenv()
 app = Flask(__name__)
 
 sqlConfig = {
-    "host": "localhost",
-    "user": "root",
+    "host": "192.168.1.63",
+    "user": "keali",
     "password": os.getenv("SQLPASSWD"),
     "database": "movieRating"
 }

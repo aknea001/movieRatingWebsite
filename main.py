@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, flash
 from dotenv import load_dotenv
 import mysql.connector
 import os
@@ -6,6 +6,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv("FLASKPASSWD")
 
 sqlConfig = {
     "host": "100.94.183.127",
@@ -37,7 +38,7 @@ def submitForm():
         cursor.execute(query, (email, passwd, country))
         connection.commit()
 
-        print("Successfully sent data..")
+        flash("Successfully sent data..")
         return redirect("/", code=302)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"

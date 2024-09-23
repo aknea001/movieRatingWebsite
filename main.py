@@ -8,7 +8,7 @@ load_dotenv()
 app = Flask(__name__)
 
 sqlConfig = {
-    "host": "192.168.1.63", #change to raspberry pi ip 
+    "host": "100.94.183.127",
     "user": "keali",
     "password": os.getenv("SQLPASSWD"),
     "database": "movieRating"

@@ -23,15 +23,14 @@ def index():
 def register():
     return render_template("register.html")
 
-@app.route("/submit", methods=["POST"])
-def submitForm():
+@app.route("/register", methods=["POST"])
+def registerForm():
     email = request.form["email"]
     passwd = request.form["passwd"]
     country = request.form["country"]
 
-    db = mysql.connector.connect(**sqlConfig)
-
     try:
+        db = mysql.connector.connect(**sqlConfig)
         cursor = db.cursor()
 
         query = "INSERT INTO users (email, passwd, country) VALUES (%s, %s, %s)"
@@ -40,6 +39,36 @@ def submitForm():
 
         flash("Successfully sent data..")
         return redirect("/", code=302)
+    except mysql.connector.Error as e:
+        return f"ERROR: {e}"
+    finally:
+        if db.is_connected():
+            cursor.close()
+            db.close()
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/login", methods=["POST"])
+def loginForm():
+    email = request.form["email"]
+    passwd = request.form["passwd"]
+
+    try:
+        db = mysql.connector.connect(**sqlConfig)
+        cursor = db.cursor()
+
+        query = "SELECT * FROM users WHERE email = %s AND passwd = %s"
+        cursor.execute(query, (email, passwd))
+        user = cursor.fetchone()
+
+        if user:
+            flash("Successfully logged in..")
+            return redirect("/", code=302)
+        else:
+            flash("Invalid email or password..")
+            return redirect("/login", code=302)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

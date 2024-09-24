@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash
+from flask import Flask, request, render_template, redirect, flash, session
 from dotenv import load_dotenv
 import mysql.connector
 import os
@@ -17,7 +17,10 @@ sqlConfig = {
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if "userID" in session:
+        return render_template("loggedIn.html")
+    else:
+        return render_template("index.html")
 
 @app.route("/register")
 def register():
@@ -64,6 +67,9 @@ def loginForm():
         user = cursor.fetchone()
 
         if user:
+            session["userID"] = user[0]
+            print(f"ID: {session["userID"]}")
+
             flash("Successfully logged in..")
             return redirect("/", code=302)
         else:

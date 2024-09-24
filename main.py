@@ -29,23 +29,23 @@ def submitForm():
     passwd = request.form["passwd"]
     country = request.form["country"]
 
-    connection = mysql.connector.connect(**sqlConfig)
+    db = mysql.connector.connect(**sqlConfig)
 
     try:
-        cursor = connection.cursor()
+        cursor = db.cursor()
 
         query = "INSERT INTO users (email, passwd, country) VALUES (%s, %s, %s)"
         cursor.execute(query, (email, passwd, country))
-        connection.commit()
+        db.commit()
 
         flash("Successfully sent data..")
         return redirect("/", code=302)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:
-        if connection.is_connected():
+        if db.is_connected():
             cursor.close()
-            connection.close()
+            db.close()
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -32,6 +32,8 @@ def registerForm():
     passwd = request.form["passwd"]
     country = request.form["country"]
 
+    db = None # Gotta declare db var before try in case it fails
+
     try:
         db = mysql.connector.connect(**sqlConfig)
         cursor = db.cursor()
@@ -45,7 +47,7 @@ def registerForm():
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:
-        if db.is_connected():
+        if db != None and db.is_connected():
             cursor.close()
             db.close()
 
@@ -58,6 +60,8 @@ def loginForm():
     email = request.form["email"]
     passwd = request.form["passwd"]
 
+    db = None
+
     try:
         db = mysql.connector.connect(**sqlConfig)
         cursor = db.cursor()
@@ -68,7 +72,7 @@ def loginForm():
 
         if user:
             session["userID"] = user[0]
-            print(f"ID: {session["userID"]}")
+            print(f"ID: {session['userID']}")
 
             flash("Successfully logged in..")
             return redirect("/", code=302)
@@ -78,7 +82,7 @@ def loginForm():
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:
-        if db.is_connected():
+        if db != None and db.is_connected():
             cursor.close()
             db.close()
 

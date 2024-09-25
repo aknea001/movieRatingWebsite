@@ -6,7 +6,11 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="/register">Register :))</a>
-    <a href="/login">Login yippie :3</a>
+    {% if "userID" in session %}
+        <p>You're logged in with ID: {{ session["userID"] }}</p>
+    {% else %}
+        <a href="/register">Register :))</a>
+        <a href="/login">Login yippie :3</a>
+    {% endif %}
 </body>
 </html>

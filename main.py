@@ -17,10 +17,7 @@ sqlConfig = {
 
 @app.route("/")
 def index():
-    if "userID" in session:
-        return render_template("loggedIn.html")
-    else:
-        return render_template("index.html")
+    return render_template("index.html")
 
 @app.route("/register")
 def register():
@@ -72,7 +69,7 @@ def loginForm():
 
         if user:
             session["userID"] = user[0]
-            print(f"ID: {session['userID']}")
+            #print(f"ID: {session['userID']}")
 
             flash("Successfully logged in..")
             return redirect("/", code=302)

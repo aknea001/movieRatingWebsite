@@ -8,6 +8,7 @@
 <body>
     {% if "userID" in session %}
         <p>You're logged in with ID: {{ session["userID"] }}</p>
+        <a href="/logout">Log out :(</a>
     {% else %}
         <a href="/register">Register :))</a>
         <a href="/login">Login yippie :3</a>

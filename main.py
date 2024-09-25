@@ -83,5 +83,11 @@ def loginForm():
             cursor.close()
             db.close()
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("Successfully logged out..")
+    return redirect("/", code=302)
+
 if __name__ == "__main__":
     app.run(debug=True)

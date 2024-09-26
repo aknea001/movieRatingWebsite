@@ -100,13 +100,32 @@ def search():
         cursor = db.cursor(buffered=True)
 
         query = "SELECT title FROM movies WHERE title LIKE %s"
-        cursor.execute(query, (f"%{searchQuery}%", ))
+        cursor.execute(query, (f"{searchQuery}%", ))
         result = cursor.fetchall()
 
-        # Convert result to a plain text response
-        titles = [row[0] for row in result]  # Extract titles from result
+        titles = [row[0] for row in result]
 
         return render_template("search.html", titles=titles, searched=searchQuery)
+    except mysql.connector.Error as e:
+        return f"ERROR: {e}"
+    finally:
+        if db != None and db.is_connected():
+            cursor.close()
+            db.close()
+
+@app.route("/title/<titleID>")
+def moviePage(titleID):
+    db = None
+
+    try:
+        db = mysql.connector.connect(**sqlConfig)
+        cursor = db.cursor(buffered=True)
+
+        query = "SELECT title, genre FROM movies WHERE id = %s"
+        cursor.execute(query, (f"{titleID}", ))
+        info = cursor.fetchone()
+
+        return render_template("title.html", title=info[0], genre=info[1])
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

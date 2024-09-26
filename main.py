@@ -33,7 +33,7 @@ def registerForm():
 
     try:
         db = mysql.connector.connect(**sqlConfig)
-        cursor = db.cursor()
+        cursor = db.cursor(buffered=True)
 
         query = "INSERT INTO users (email, passwd, country) VALUES (%s, %s, %s)"
         cursor.execute(query, (email, passwd, country))
@@ -61,7 +61,7 @@ def loginForm():
 
     try:
         db = mysql.connector.connect(**sqlConfig)
-        cursor = db.cursor()
+        cursor = db.cursor(buffered=True)
 
         query = "SELECT * FROM users WHERE email = %s AND passwd = %s"
         cursor.execute(query, (email, passwd))
@@ -91,7 +91,28 @@ def logout():
 
 @app.route("/search", methods=["POST"])
 def search():
-    pass
+    searchQuery = request.form["searchQuery"]
+
+    db = None
+
+    try:
+        db = mysql.connector.connect(**sqlConfig)
+        cursor = db.cursor(buffered=True)
+
+        query = "SELECT title FROM movies WHERE title LIKE 'sh%'"
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        # Convert result to a plain text response
+        titles = [row[0] for row in result]  # Extract titles from result
+
+        return render_template("search.html", titles=titles)
+    except mysql.connector.Error as e:
+        return f"ERROR: {e}"
+    finally:
+        if db != None and db.is_connected():
+            cursor.close()
+            db.close()
 
 if __name__ == "__main__":
     app.run(debug=True)

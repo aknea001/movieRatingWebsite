@@ -99,14 +99,14 @@ def search():
         db = mysql.connector.connect(**sqlConfig)
         cursor = db.cursor(buffered=True)
 
-        query = "SELECT title FROM movies WHERE title LIKE 'sh%'"
-        cursor.execute(query)
+        query = "SELECT title FROM movies WHERE title LIKE %s"
+        cursor.execute(query, (f"%{searchQuery}%", ))
         result = cursor.fetchall()
 
         # Convert result to a plain text response
         titles = [row[0] for row in result]  # Extract titles from result
 
-        return render_template("search.html", titles=titles)
+        return render_template("search.html", titles=titles, searched=searchQuery)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

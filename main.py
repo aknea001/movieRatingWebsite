@@ -106,8 +106,8 @@ def search():
 
         titles = [row[0] for row in result]
         ratings = [row[1] for row in result]
-        print(titles)
-        print(ratings)
+        #print(titles)
+        #print(ratings)
 
         return render_template("search.html", titles=titles, movieID=ratings, searched=searchQuery)
     except mysql.connector.Error as e:

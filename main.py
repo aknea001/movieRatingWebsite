@@ -7,6 +7,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASKPASSWD")
+app.jinja_env.filters["zip"] = zip
 
 sqlConfig = {
     "host": "100.94.183.127",
@@ -99,13 +100,16 @@ def search():
         db = mysql.connector.connect(**sqlConfig)
         cursor = db.cursor(buffered=True)
 
-        query = "SELECT title FROM movies WHERE title LIKE %s"
+        query = "SELECT title, id FROM movies WHERE title LIKE %s"
         cursor.execute(query, (f"{searchQuery}%", ))
         result = cursor.fetchall()
 
         titles = [row[0] for row in result]
+        ratings = [row[1] for row in result]
+        print(titles)
+        print(ratings)
 
-        return render_template("search.html", titles=titles, searched=searchQuery)
+        return render_template("search.html", titles=titles, movieID=ratings, searched=searchQuery)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:
@@ -129,7 +133,7 @@ def moviePage(titleID):
 
         ratings = [int(rating) for rating in info[2].split(",")]
         average = sum(ratings) / len(ratings)
-        print(ratings)
+        # print(ratings)
 
         return render_template("title.html", title=info[0], genre=info[1], ratings=info[2], average=round(average, 1))
     except mysql.connector.Error as e:
@@ -140,4 +144,4 @@ def moviePage(titleID):
             db.close()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")

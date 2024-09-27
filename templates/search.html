@@ -7,8 +7,8 @@
 </head>
 <body>
     <h1>Results for {{ searched }}:</h1>
-    {% for movies in titles %}
-        <p>{{ movies }}</p>
+    {% for movies, IDs in titles|zip(movieID) %}
+        <a href="/title/{{ IDs }}">{{ movies }}</a><br>
     {% else %}
         <p>No movies found</p>
     {% endfor %}

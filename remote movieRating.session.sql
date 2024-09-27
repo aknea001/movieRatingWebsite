@@ -25,7 +25,14 @@ ORDER BY ratings.movieID ASC;
 SELECT movies.title, movies.genre, ratings.rating FROM ratings INNER JOIN movies ON ratings.movieID = movies.id WHERE movieID = 4;
 
 -- @block
-SELECT movies.title, movies.genre, GROUP_CONCAT(ratings.rating ORDER BY ratings.rating ASC) AS all_ratings FROM movies INNER JOIN ratings ON ratings.movieID = movies.id WHERE ratings.movieID = 2 GROUP BY movies.id, movies.title, movies.genre;
+SELECT
+    movies.title, 
+    movies.genre, 
+    GROUP_CONCAT(ratings.rating ORDER BY ratings.rating ASC) AS all_ratings 
+FROM movies 
+INNER JOIN ratings ON ratings.movieID = movies.id 
+WHERE ratings.movieID = 2 
+GROUP BY movies.id, movies.title, movies.genre;
 
 
 -- @block

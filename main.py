@@ -107,8 +107,9 @@ def search():
         db = mysql.connector.connect(**sqlConfig)
         cursor = db.cursor(buffered=True)
 
-        query = "SELECT title, id FROM movies WHERE title LIKE %s"
-        cursor.execute(query, (f"{searchQuery}%", ))
+        query = "SELECT title, id FROM movies WHERE title LIKE %s OR title LIKE CONCAT('the ', %s)"
+        placeholders = [f"{searchQuery}%"] * 2
+        cursor.execute(query, placeholders)
         result = cursor.fetchall()
 
         titles = [row[0] for row in result]

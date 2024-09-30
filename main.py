@@ -73,7 +73,14 @@ def loginForm():
             #print(f"ID: {session['userID']}")
 
             flash("Successfully logged in..")
-            return redirect("/", code=302)
+
+            if "url" in session:
+                toRedirect = session["url"]
+                session.pop("url")
+
+                return redirect(toRedirect)
+            else:
+                return redirect("/", code=302)
         else:
             flash("Invalid email or password..")
             return redirect("/login", code=302)
@@ -164,12 +171,17 @@ def rateForm(titleID):
         db = mysql.connector.connect(**sqlConfig)
         cursor = db.cursor(buffered=True)
 
-        query = "INSERT INTO ratings (movieID, rating, userID) VALUES (%s, %s, %s)"
-        cursor.execute(query, (titleID, rating, 1)) # usin userID 1 just for testin, change after (gotta check if logged in to rate)
-        db.commit()
+        if "userID" in session:
+            query = "INSERT INTO ratings (movieID, rating, userID) VALUES (%s, %s, %s)"
+            cursor.execute(query, (titleID, rating, session["userID"])) # usin userID 1 just for testin, change after (gotta check if logged in to rate)
+            db.commit()
 
-        flash("Successfully sent data..")
-        return redirect(url_for("moviePage", titleID=titleID))
+            flash("Successfully sent data..")
+            return redirect(url_for("moviePage", titleID=titleID))
+        else:
+            flash("You have to be logged in..")
+            session["url"] = url_for("moviePage", titleID=titleID)
+            return redirect(url_for("login"))
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

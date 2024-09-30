@@ -41,7 +41,7 @@ def registerForm():
         db.commit()
 
         flash("Successfully sent data..")
-        return redirect("/", code=302)
+        return redirect("/login", code=302)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

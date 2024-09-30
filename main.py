@@ -128,14 +128,25 @@ def moviePage(titleID):
         query = "SELECT movies.title, movies.genre, GROUP_CONCAT(ratings.rating ORDER BY ratings.rating ASC)\
             AS allRatings FROM movies INNER JOIN ratings ON ratings.movieID = movies.id\
             WHERE ratings.movieID = %s GROUP BY movies.id, movies.title, movies.genre;"
-        cursor.execute(query, (f"{titleID}", ))
+        cursor.execute(query, (titleID, ))
         info = cursor.fetchone()
 
-        ratings = [int(rating) for rating in info[2].split(",")]
-        average = sum(ratings) / len(ratings)
-        # print(ratings)
+        if info == None:
+            query = "SELECT title, genre FROM movies WHERE id = %s"
+            cursor.execute(query, (titleID, ))
+            info = cursor.fetchone()
 
-        return render_template("title.html", title=info[0], genre=info[1], ratings=info[2], average=round(average, 1))
+        try:
+            ratings = info[2]
+            ratingsList = [int(rating) for rating in info[2].split(",")]
+            average = sum(ratingsList) / len(ratingsList)
+            averageRounded = round(average, 1)
+            # print(ratings)
+        except IndexError:
+            ratings = "Not rated yet"
+            averageRounded = "no average"
+
+        return render_template("title.html", title=info[0], genre=info[1], ratings=ratings, average=averageRounded)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

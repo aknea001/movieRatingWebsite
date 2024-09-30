@@ -77,3 +77,6 @@ GROUP BY
 
 -- @block
 SELECT movies.title, movies.genre, GROUP_CONCAT(ratings.rating ORDER BY ratings.rating ASC) AS all_ratings FROM movies INNER JOIN ratings ON ratings.movieID = movies.id WHERE ratings.movieID = 4 GROUP BY movies.id, movies.title, movies.genre
+
+-- @block
+SELECT * FROM users;

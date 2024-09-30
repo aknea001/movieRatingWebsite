@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash, session
+from flask import Flask, request, render_template, redirect, flash, session, url_for
 from dotenv import load_dotenv
 import mysql.connector
 import os
@@ -147,6 +147,29 @@ def moviePage(titleID):
             averageRounded = "no average"
 
         return render_template("title.html", title=info[0], genre=info[1], ratings=ratings, average=averageRounded, movieID=titleID)
+    except mysql.connector.Error as e:
+        return f"ERROR: {e}"
+    finally:
+        if db != None and db.is_connected():
+            cursor.close()
+            db.close()
+
+@app.route("/title/<titleID>", methods=["POST"])
+def rateForm(titleID):
+    rating = request.form["rating"]
+
+    db = None
+
+    try:
+        db = mysql.connector.connect(**sqlConfig)
+        cursor = db.cursor(buffered=True)
+
+        query = "INSERT INTO ratings (movieID, rating, userID) VALUES (%s, %s, %s)"
+        cursor.execute(query, (titleID, rating, 1)) # usin userID 1 just for testin, change after (gotta check if logged in to rate)
+        db.commit()
+
+        flash("Successfully sent data..")
+        return redirect(url_for("moviePage", titleID=titleID))
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

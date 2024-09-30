@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <a href="/">Home</a>
     <h1>{{ title }}</h1>
     <p>genre:</p>
     <p>{{ genre }}</p>
@@ -25,6 +26,11 @@
         </select>
 
         <input style="display: none;" id="confirmRate" type="submit" value="rate">
+    </form>
+    <br><br><br>
+
+    <form action="/search" method="POST">
+        <input placeholder="Search Movies.." type="search" name="searchQuery" id="searchQuery">
     </form>
 
     <script>

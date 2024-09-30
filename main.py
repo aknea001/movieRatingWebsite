@@ -189,5 +189,33 @@ def rateForm(titleID):
             cursor.close()
             db.close()
 
+@app.route("/submit_movie")
+def subMovie():
+    return render_template("addMovie.html")
+
+@app.route("/submit_movie", methods=["POST"])
+def submitMovieForm():
+    title = request.form["title"]
+    genre = request.form["genre"]
+
+    db = None
+
+    try:
+        db = mysql.connector.connect(**sqlConfig)
+        cursor = db.cursor(buffered=True)
+
+        query = "INSERT INTO movies (title, genre) VALUES (%s, %s)"
+        cursor.execute(query, (title, genre))
+        db.commit()
+
+        flash("Successfully sent data..")
+        return redirect("/", code=302)
+    except mysql.connector.Error as e:
+        return f"ERROR: {e}"
+    finally:
+        if db != None and db.is_connected():
+            cursor.close()
+            db.close()
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

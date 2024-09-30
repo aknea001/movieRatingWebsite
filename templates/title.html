@@ -11,7 +11,31 @@
     <p>{{ genre }}</p>
     <p>All ratings:</p>
     <p>{{ ratings }}</p>
-    <p>Average rating</p>
-    <p>{{ average }}</p>
+    <p>Average rating:</p>
+    <p>{{ average }}</p><br><br>
+
+    <form onclick="checkRated()" action="/title/{{ movieID }}" method="POST" id="rateForm">
+        <select name="rating" id="rating">
+            <option value="" selected hidden disabled>--Rate--</option>
+            <option value="1">1 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+        </select>
+
+        <input style="display: none;" id="confirmRate" type="submit" value="rate">
+    </form>
+
+    <script>
+        confirmBtn = document.getElementById("confirmRate")
+        drpDown = document.getElementById("rating")
+
+        function checkRated() {
+            if (drpDown.value != "") {
+                confirmBtn.style.display = "block"
+            }
+        }
+    </script>
 </body>
 </html>

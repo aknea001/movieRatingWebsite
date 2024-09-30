@@ -146,7 +146,7 @@ def moviePage(titleID):
             ratings = "Not rated yet"
             averageRounded = "no average"
 
-        return render_template("title.html", title=info[0], genre=info[1], ratings=ratings, average=averageRounded)
+        return render_template("title.html", title=info[0], genre=info[1], ratings=ratings, average=averageRounded, movieID=titleID)
     except mysql.connector.Error as e:
         return f"ERROR: {e}"
     finally:

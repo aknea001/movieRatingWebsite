@@ -80,3 +80,7 @@ SELECT movies.title, movies.genre, GROUP_CONCAT(ratings.rating ORDER BY ratings.
 
 -- @block
 SELECT * FROM users;
+
+-- @block
+ALTER TABLE ratings
+ADD CONSTRAINT uniqueRatings UNIQUE (userID, movieID);
